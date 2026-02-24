@@ -42,6 +42,7 @@
 #include <warnings.h>
 
 #include <future>
+#include <list>
 #include <sstream>
 
 #include <boost/algorithm/string/replace.hpp>
