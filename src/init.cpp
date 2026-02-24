@@ -531,11 +531,13 @@ std::string LicenseInfo()
 {
     const std::string URL_SOURCE_CODE = "<https://github.com/arnoldcho/xpchain-community-core/>";
     const std::string URL_WEBSITE = "<https://www.xpchain.co.kr/>";
+    const std::string COPYRIGHT_XPCHAIN_COMMUNITY = "Copyright (C) 2019-2026 The XPChain Community developers";
+    const std::string COPYRIGHT_XPCHAIN_CORE = "Copyright (C) 2018-2019 The XPChain Core developers";
 
-    return CopyrightHolders(strprintf(_("Copyright (C) %i-%i"), 2018, COPYRIGHT_YEAR) + " ") + "\n" +
+    return COPYRIGHT_XPCHAIN_COMMUNITY + "\n" +
+           COPYRIGHT_XPCHAIN_CORE + "\n" +
            "\n" +
-           strprintf(_("Please contribute if you find %s useful. "
-                       "Visit %s for further information about the software."),
+           strprintf(_("For the latest information about %s, visit %s."),
                PACKAGE_NAME, URL_WEBSITE) +
            "\n" +
            strprintf(_("The source code is available from %s."),
