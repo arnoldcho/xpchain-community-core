@@ -1,6 +1,6 @@
 XPChain Core version 0.17.0-2 is now available from:
 
-  <https://www.xpchain.io/?loc=lnkwallet>
+  <https://www.xpchain.co.kr/?loc=lnkwallet>
 
 This is a new minor version release, with various bugfixes
 and translation updates.

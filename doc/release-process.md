@@ -27,7 +27,7 @@ Before every major release:
 
 Finally:
 * Announce the release:
-  - Update xpchain.io
+  - Update xpchain.co.kr
   - Official announcements in Discord, Twitter, etc.
   - Archive release notes for the new version to `doc/release-notes/` (branch `master` and branch of the release)
   - Create a [new GitHub release](https://github.com/xpc-wg/xpchain/releases/new) with a link to the archived release notes.
