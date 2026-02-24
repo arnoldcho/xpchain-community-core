@@ -36,7 +36,8 @@ jobs:
             libboost-system-dev libboost-filesystem-dev libboost-chrono-dev \
             libboost-test-dev libboost-thread-dev libdb-dev libdb++-dev \
             qtbase5-dev qttools5-dev qttools5-dev-tools \
-            libprotobuf-dev protobuf-compiler libqrencode-dev libminiupnpc-dev
+            libprotobuf-dev protobuf-compiler libqrencode-dev libminiupnpc-dev \
+            patchelf
 
       - name: Build
         run: |
@@ -47,10 +48,28 @@ jobs:
       - name: Package
         run: |
           TAG="${RELEASE_TAG}"
-          mkdir -p dist
+          mkdir -p dist/lib
           cp src/xpchaind src/xpchain-cli src/xpchain-tx src/qt/xpchain-qt dist/
           strip dist/xpchaind dist/xpchain-cli dist/xpchain-tx dist/xpchain-qt || true
-          tar -C dist -czf "xpchain-${TAG}-linux-x86_64.tar.gz" xpchaind xpchain-cli xpchain-tx xpchain-qt
+          # Bundle non-system shared libs so runtime does not depend on host distro versions.
+          : > /tmp/xpc-lib-list.txt
+          for bin in dist/xpchaind dist/xpchain-cli dist/xpchain-tx dist/xpchain-qt; do
+            ldd "$bin" | awk '/=> \// {print $3}' >> /tmp/xpc-lib-list.txt
+          done
+          sort -u /tmp/xpc-lib-list.txt | while read -r lib; do
+            [ -n "$lib" ] || continue
+            case "$lib" in
+              /lib/*|/lib64/*)
+                # Keep glibc/loader from target system.
+                continue
+                ;;
+            esac
+            cp -L "$lib" "dist/lib/$(basename "$lib")"
+          done
+          for bin in dist/xpchaind dist/xpchain-cli dist/xpchain-tx dist/xpchain-qt; do
+            patchelf --set-rpath '$ORIGIN/lib' "$bin"
+          done
+          tar -C dist -czf "xpchain-${TAG}-linux-x86_64.tar.gz" xpchaind xpchain-cli xpchain-tx xpchain-qt lib
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
