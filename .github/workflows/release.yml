@@ -76,7 +76,7 @@ jobs:
       - name: Build depends (x86_64-w64-mingw32)
         run: |
           cd depends
-          make HOST=x86_64-w64-mingw32 -j"$(nproc)"
+          make HOST=x86_64-w64-mingw32 FALLBACK_DOWNLOAD_PATH=https://bitcoincore.org/depends-sources -j"$(nproc)"
 
       - name: Configure and build
         run: |
@@ -117,7 +117,7 @@ jobs:
       - name: Build depends (i686-w64-mingw32)
         run: |
           cd depends
-          make HOST=i686-w64-mingw32 -j"$(nproc)"
+          make HOST=i686-w64-mingw32 FALLBACK_DOWNLOAD_PATH=https://bitcoincore.org/depends-sources -j"$(nproc)"
 
       - name: Configure and build
         run: |
@@ -156,11 +156,12 @@ jobs:
       - name: Build
         run: |
           BREW_PREFIX="$(brew --prefix)"
+          BOOST_PREFIX="$(brew --prefix boost)"
           export LDFLAGS="-L${BREW_PREFIX}/opt/openssl@3/lib -L${BREW_PREFIX}/opt/berkeley-db@4/lib -L${BREW_PREFIX}/opt/boost/lib"
           export CPPFLAGS="-I${BREW_PREFIX}/opt/openssl@3/include -I${BREW_PREFIX}/opt/berkeley-db@4/include -I${BREW_PREFIX}/opt/boost/include"
           export PKG_CONFIG_PATH="${BREW_PREFIX}/opt/openssl@3/lib/pkgconfig:${BREW_PREFIX}/opt/qt@5/lib/pkgconfig"
           ./autogen.sh
-          ./configure --with-gui=qt5 --with-boost="${BREW_PREFIX}/opt/boost"
+          ./configure --with-gui=qt5 --with-boost="${BOOST_PREFIX}" --with-boost-libdir="${BOOST_PREFIX}/lib"
           make -j"$(sysctl -n hw.ncpu)"
 
       - name: Package
