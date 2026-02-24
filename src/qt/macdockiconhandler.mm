@@ -16,9 +16,11 @@
 
 static MacDockIconHandler *s_instance = nullptr;
 
-bool dockClickHandler(id self,SEL _cmd,...) {
+bool dockClickHandler(id self, SEL _cmd, id sender, bool hasVisibleWindows) {
     Q_UNUSED(self)
     Q_UNUSED(_cmd)
+    Q_UNUSED(sender)
+    Q_UNUSED(hasVisibleWindows)
 
     s_instance->handleDockIconClickEvent();
 
@@ -28,16 +30,18 @@ bool dockClickHandler(id self,SEL _cmd,...) {
 
 void setupDockClickHandler() {
     Class cls = objc_getClass("NSApplication");
-    id appInst = objc_msgSend((id)cls, sel_registerName("sharedApplication"));
+    id (*objc_msgSend_id)(id, SEL) = reinterpret_cast<id (*)(id, SEL)>(objc_msgSend);
+    id appInst = objc_msgSend_id((id)cls, sel_registerName("sharedApplication"));
 
     if (appInst != nullptr) {
-        id delegate = objc_msgSend(appInst, sel_registerName("delegate"));
-        Class delClass = (Class)objc_msgSend(delegate,  sel_registerName("class"));
+        id delegate = objc_msgSend_id(appInst, sel_registerName("delegate"));
+        if (delegate == nullptr) return;
+        Class delClass = (Class)objc_msgSend_id(delegate, sel_registerName("class"));
         SEL shouldHandle = sel_registerName("applicationShouldHandleReopen:hasVisibleWindows:");
         if (class_getInstanceMethod(delClass, shouldHandle))
-            class_replaceMethod(delClass, shouldHandle, (IMP)dockClickHandler, "B@:");
+            class_replaceMethod(delClass, shouldHandle, (IMP)dockClickHandler, "B@:@B");
         else
-            class_addMethod(delClass, shouldHandle, (IMP)dockClickHandler,"B@:");
+            class_addMethod(delClass, shouldHandle, (IMP)dockClickHandler, "B@:@B");
     }
 }
 
