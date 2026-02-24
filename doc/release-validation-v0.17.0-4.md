@@ -42,3 +42,45 @@
 
 ## Follow-up
 - Keep using `rc` tags for pre-release validation and only finalize stable version tags after runtime checks on all target OS.
+
+## Linux Validation (PASS)
+
+### Environment
+- Platform: Ubuntu 24.04 (Vultr, XFCE)
+- Binary package: `xpchain-v0.17.0-4-linux-x86_64.tar.gz`
+- Runtime files: `xpchaind`, `xpchain-cli`, `xpchain-tx`, `xpchain-qt`
+
+### Checks
+1. Node start and chain progress
+- Command: `./xpchain-cli getblockchaininfo`
+- Result: `PASS`
+- Notes: node started normally, chain sync progressed from low height and continued.
+
+2. P2P connectivity
+- Command: `./xpchain-cli getnetworkinfo`, `./xpchain-cli getconnectioncount`
+- Result: `PASS`
+- Notes: active peers observed (`connections` in normal range, e.g. 7~9).
+
+3. Wallet status RPC
+- Command: `./xpchain-cli getwalletinfo`
+- Result: `PASS`
+- Notes: wallet metadata and keypool fields returned normally.
+
+4. Receive transaction flow
+- Command: `listtransactions` (Qt debug console)
+- Result: `PASS`
+- Notes: `category: "receive"` transaction confirmed, confirmations increased over time.
+
+5. Send transaction flow
+- Command: `listtransactions` (Qt debug console)
+- Result: `PASS`
+- Notes: `category: "send"` transaction confirmed with fee and block inclusion.
+
+6. Restart resilience
+- Action: `xpchaind` / `xpchain-qt` stop-start cycle
+- Result: `PASS`
+- Notes: wallet and node resumed normally after restart.
+
+### Conclusion
+- Linux runtime and wallet receive/send/restart behavior validated for `v0.17.0-4`.
+- Current status: **usable for practical wallet operation** under tested Ubuntu 24.04 environment.
