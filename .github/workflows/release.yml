@@ -152,7 +152,6 @@ jobs:
   macos:
     name: macOS arm64/x86_64 runner build
     runs-on: macos-latest
-    continue-on-error: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -171,15 +170,17 @@ jobs:
           export BOOST_ROOT="${BOOST_PREFIX}"
           export BOOST_INCLUDEDIR="${BOOST_PREFIX}/include"
           export BOOST_LIBRARYDIR="${BOOST_PREFIX}/lib"
-          export BOOST_SYSTEM_LIB="-lboost_system"
-          export BOOST_FILESYSTEM_LIB="-lboost_filesystem"
-          export BOOST_THREAD_LIB="-lboost_thread"
-          export BOOST_CHRONO_LIB="-lboost_chrono"
           export LDFLAGS="-L${BREW_PREFIX}/opt/openssl@3/lib -L${BREW_PREFIX}/opt/berkeley-db@4/lib -L${BREW_PREFIX}/opt/boost/lib"
           export CPPFLAGS="-I${BREW_PREFIX}/opt/openssl@3/include -I${BREW_PREFIX}/opt/berkeley-db@4/include -I${BREW_PREFIX}/opt/boost/include"
           export PKG_CONFIG_PATH="${BREW_PREFIX}/opt/openssl@3/lib/pkgconfig:${BREW_PREFIX}/opt/qt@5/lib/pkgconfig"
           ./autogen.sh
-          ./configure --without-gui --with-boost="${BOOST_PREFIX}" --with-boost-libdir="${BOOST_PREFIX}/lib"
+          ./configure --without-gui \
+            --with-boost="${BOOST_PREFIX}" \
+            --with-boost-libdir="${BOOST_PREFIX}/lib" \
+            --with-boost-system=boost_system \
+            --with-boost-filesystem=boost_filesystem \
+            --with-boost-thread=boost_thread \
+            --with-boost-chrono=boost_chrono
           make -j"$(sysctl -n hw.ncpu)"
 
       - name: Package
