@@ -49,6 +49,7 @@ jobs:
           TAG="${RELEASE_TAG}"
           mkdir -p dist
           cp src/xpchaind src/xpchain-cli src/xpchain-tx src/qt/xpchain-qt dist/
+          strip dist/xpchaind dist/xpchain-cli dist/xpchain-tx dist/xpchain-qt || true
           tar -C dist -czf "xpchain-${TAG}-linux-x86_64.tar.gz" xpchaind xpchain-cli xpchain-tx xpchain-qt
 
       - name: Upload artifact
@@ -81,26 +82,22 @@ jobs:
       - name: Build depends (x86_64-w64-mingw32)
         run: |
           cd depends
-          make HOST=x86_64-w64-mingw32 NO_QT=1 FALLBACK_DOWNLOAD_PATH=https://bitcoincore.org/depends-sources -j"$(nproc)"
+          make HOST=x86_64-w64-mingw32 FALLBACK_DOWNLOAD_PATH=https://bitcoincore.org/depends-sources -j"$(nproc)"
 
       - name: Configure and build
         run: |
           ./autogen.sh
-          CONFIG_SITE=$PWD/depends/x86_64-w64-mingw32/share/config.site ./configure --prefix=/ --without-gui
+          CONFIG_SITE=$PWD/depends/x86_64-w64-mingw32/share/config.site ./configure --prefix=/
           make -j"$(nproc)"
 
       - name: Package
         run: |
           TAG="${RELEASE_TAG}"
           mkdir -p dist
-          cp src/xpchaind.exe src/xpchain-cli.exe src/xpchain-tx.exe dist/
-          if [ -f src/qt/xpchain-qt.exe ]; then cp src/qt/xpchain-qt.exe dist/; fi
+          cp src/xpchaind.exe src/xpchain-cli.exe src/xpchain-tx.exe src/qt/xpchain-qt.exe dist/
+          x86_64-w64-mingw32-strip dist/xpchaind.exe dist/xpchain-cli.exe dist/xpchain-tx.exe dist/xpchain-qt.exe || true
           cd dist
-          if [ -f xpchain-qt.exe ]; then
-            zip -9 "../xpchain-${TAG}-win64.zip" xpchaind.exe xpchain-cli.exe xpchain-tx.exe xpchain-qt.exe
-          else
-            zip -9 "../xpchain-${TAG}-win64.zip" xpchaind.exe xpchain-cli.exe xpchain-tx.exe
-          fi
+          zip -9 "../xpchain-${TAG}-win64.zip" xpchaind.exe xpchain-cli.exe xpchain-tx.exe xpchain-qt.exe
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -132,26 +129,22 @@ jobs:
       - name: Build depends (i686-w64-mingw32)
         run: |
           cd depends
-          make HOST=i686-w64-mingw32 NO_QT=1 FALLBACK_DOWNLOAD_PATH=https://bitcoincore.org/depends-sources -j"$(nproc)"
+          make HOST=i686-w64-mingw32 FALLBACK_DOWNLOAD_PATH=https://bitcoincore.org/depends-sources -j"$(nproc)"
 
       - name: Configure and build
         run: |
           ./autogen.sh
-          CONFIG_SITE=$PWD/depends/i686-w64-mingw32/share/config.site ./configure --prefix=/ --without-gui
+          CONFIG_SITE=$PWD/depends/i686-w64-mingw32/share/config.site ./configure --prefix=/
           make -j"$(nproc)"
 
       - name: Package
         run: |
           TAG="${RELEASE_TAG}"
           mkdir -p dist
-          cp src/xpchaind.exe src/xpchain-cli.exe src/xpchain-tx.exe dist/
-          if [ -f src/qt/xpchain-qt.exe ]; then cp src/qt/xpchain-qt.exe dist/; fi
+          cp src/xpchaind.exe src/xpchain-cli.exe src/xpchain-tx.exe src/qt/xpchain-qt.exe dist/
+          i686-w64-mingw32-strip dist/xpchaind.exe dist/xpchain-cli.exe dist/xpchain-tx.exe dist/xpchain-qt.exe || true
           cd dist
-          if [ -f xpchain-qt.exe ]; then
-            zip -9 "../xpchain-${TAG}-win32.zip" xpchaind.exe xpchain-cli.exe xpchain-tx.exe xpchain-qt.exe
-          else
-            zip -9 "../xpchain-${TAG}-win32.zip" xpchaind.exe xpchain-cli.exe xpchain-tx.exe
-          fi
+          zip -9 "../xpchain-${TAG}-win32.zip" xpchaind.exe xpchain-cli.exe xpchain-tx.exe xpchain-qt.exe
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
