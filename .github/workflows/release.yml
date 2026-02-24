@@ -173,17 +173,7 @@ jobs:
           export BOOST_ROOT="${BOOST_PREFIX}"
           export BOOST_INCLUDEDIR="${BOOST_PREFIX}/include"
           export BOOST_LIBRARYDIR="${BOOST_PREFIX}/lib"
-          if ls "${BOOST_PREFIX}/lib"/libboost_system-mt* >/dev/null 2>&1; then
-            BOOST_SYSTEM_LIB="boost_system-mt"
-            BOOST_FILESYSTEM_LIB="boost_filesystem-mt"
-            BOOST_THREAD_LIB="boost_thread-mt"
-            BOOST_CHRONO_LIB="boost_chrono-mt"
-          else
-            BOOST_SYSTEM_LIB="boost_system"
-            BOOST_FILESYSTEM_LIB="boost_filesystem"
-            BOOST_THREAD_LIB="boost_thread"
-            BOOST_CHRONO_LIB="boost_chrono"
-          fi
+          export BOOST_LDFLAGS="-L${BOOST_PREFIX}/lib"
           export LDFLAGS="-L${BREW_PREFIX}/opt/openssl@3/lib -L${BREW_PREFIX}/opt/berkeley-db@4/lib"
           export CPPFLAGS="-I${BREW_PREFIX}/opt/openssl@3/include -I${BREW_PREFIX}/opt/berkeley-db@4/include -I${BREW_PREFIX}/opt/boost/include"
           export PKG_CONFIG_PATH="${BREW_PREFIX}/opt/openssl@3/lib/pkgconfig:${BREW_PREFIX}/opt/qt@5/lib/pkgconfig"
@@ -192,11 +182,8 @@ jobs:
             --disable-tests \
             --disable-bench \
             --with-incompatible-bdb \
-            --with-boost-libdir="${BOOST_PREFIX}/lib" \
-            --with-boost-system="${BOOST_SYSTEM_LIB}" \
-            --with-boost-filesystem="${BOOST_FILESYSTEM_LIB}" \
-            --with-boost-thread="${BOOST_THREAD_LIB}" \
-            --with-boost-chrono="${BOOST_CHRONO_LIB}"
+            --with-boost="${BOOST_PREFIX}" \
+            --with-boost-libdir="${BOOST_PREFIX}/lib"
           make -j"$(sysctl -n hw.ncpu)"
 
       - name: Package
