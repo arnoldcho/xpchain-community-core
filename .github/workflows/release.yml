@@ -178,7 +178,9 @@ jobs:
           export PKG_CONFIG_PATH="${BREW_PREFIX}/opt/openssl@3/lib/pkgconfig:${BREW_PREFIX}/opt/qt@5/lib/pkgconfig"
           ./autogen.sh
           ./configure --without-gui \
-            --with-boost="${BOOST_PREFIX}" \
+            --disable-tests \
+            --disable-bench \
+            --with-incompatible-bdb \
             --with-boost-libdir="${BOOST_PREFIX}/lib"
           make -j"$(sysctl -n hw.ncpu)"
 
