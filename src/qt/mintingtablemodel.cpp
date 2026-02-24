@@ -591,7 +591,7 @@ static void NotifyTransactionChanged(MintingTableModel *mtm, const uint256 &hash
 void MintingTableModel::subscribeToCoreSignals()
 {
     // Connect signals to wallet
-    m_handler_transaction_changed = walletModel->wallet().handleTransactionChanged(boost::bind(NotifyTransactionChanged, this, _1, _2));
+    m_handler_transaction_changed = walletModel->wallet().handleTransactionChanged(boost::bind(NotifyTransactionChanged, this, boost::placeholders::_1, boost::placeholders::_2));
 }
 
 void MintingTableModel::unsubscribeFromCoreSignals()
