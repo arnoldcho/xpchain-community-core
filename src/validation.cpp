@@ -1210,6 +1210,8 @@ double_t GetAnnualRate(int nHeight, const Consensus::Params& consensusParams)
         return 0.05;
     }
 
+    // Defensive fallback for compiler return-path analysis.
+    return 0.05;
 }
 
 CAmount GetProofOfStakeReward(int nHeight, CAmount nAmount, uint32_t nTime, const Consensus::Params& consensusParams)
