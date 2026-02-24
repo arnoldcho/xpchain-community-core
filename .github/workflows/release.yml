@@ -188,7 +188,7 @@ jobs:
           export CPPFLAGS="-I${BREW_PREFIX}/opt/openssl@3/include -I${BREW_PREFIX}/opt/berkeley-db@4/include -I${BREW_PREFIX}/opt/boost/include"
           export PKG_CONFIG_PATH="${BREW_PREFIX}/opt/openssl@3/lib/pkgconfig:${BREW_PREFIX}/opt/qt@5/lib/pkgconfig"
           ./autogen.sh
-          ./configure --without-gui \
+          ./configure --with-gui=qt5 \
             --disable-tests \
             --disable-bench \
             --with-incompatible-bdb \
