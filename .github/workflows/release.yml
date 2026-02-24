@@ -76,21 +76,26 @@ jobs:
       - name: Build depends (x86_64-w64-mingw32)
         run: |
           cd depends
-          make HOST=x86_64-w64-mingw32 FALLBACK_DOWNLOAD_PATH=https://bitcoincore.org/depends-sources -j"$(nproc)"
+          make HOST=x86_64-w64-mingw32 NO_QT=1 FALLBACK_DOWNLOAD_PATH=https://bitcoincore.org/depends-sources -j"$(nproc)"
 
       - name: Configure and build
         run: |
           ./autogen.sh
-          CONFIG_SITE=$PWD/depends/x86_64-w64-mingw32/share/config.site ./configure --prefix=/
+          CONFIG_SITE=$PWD/depends/x86_64-w64-mingw32/share/config.site ./configure --prefix=/ --without-gui
           make -j"$(nproc)"
 
       - name: Package
         run: |
           TAG="${RELEASE_TAG}"
           mkdir -p dist
-          cp src/xpchaind.exe src/xpchain-cli.exe src/xpchain-tx.exe src/qt/xpchain-qt.exe dist/
+          cp src/xpchaind.exe src/xpchain-cli.exe src/xpchain-tx.exe dist/
+          if [ -f src/qt/xpchain-qt.exe ]; then cp src/qt/xpchain-qt.exe dist/; fi
           cd dist
-          zip -9 "../xpchain-${TAG}-win64.zip" xpchaind.exe xpchain-cli.exe xpchain-tx.exe xpchain-qt.exe
+          if [ -f xpchain-qt.exe ]; then
+            zip -9 "../xpchain-${TAG}-win64.zip" xpchaind.exe xpchain-cli.exe xpchain-tx.exe xpchain-qt.exe
+          else
+            zip -9 "../xpchain-${TAG}-win64.zip" xpchaind.exe xpchain-cli.exe xpchain-tx.exe
+          fi
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -117,21 +122,26 @@ jobs:
       - name: Build depends (i686-w64-mingw32)
         run: |
           cd depends
-          make HOST=i686-w64-mingw32 FALLBACK_DOWNLOAD_PATH=https://bitcoincore.org/depends-sources -j"$(nproc)"
+          make HOST=i686-w64-mingw32 NO_QT=1 FALLBACK_DOWNLOAD_PATH=https://bitcoincore.org/depends-sources -j"$(nproc)"
 
       - name: Configure and build
         run: |
           ./autogen.sh
-          CONFIG_SITE=$PWD/depends/i686-w64-mingw32/share/config.site ./configure --prefix=/
+          CONFIG_SITE=$PWD/depends/i686-w64-mingw32/share/config.site ./configure --prefix=/ --without-gui
           make -j"$(nproc)"
 
       - name: Package
         run: |
           TAG="${RELEASE_TAG}"
           mkdir -p dist
-          cp src/xpchaind.exe src/xpchain-cli.exe src/xpchain-tx.exe src/qt/xpchain-qt.exe dist/
+          cp src/xpchaind.exe src/xpchain-cli.exe src/xpchain-tx.exe dist/
+          if [ -f src/qt/xpchain-qt.exe ]; then cp src/qt/xpchain-qt.exe dist/; fi
           cd dist
-          zip -9 "../xpchain-${TAG}-win32.zip" xpchaind.exe xpchain-cli.exe xpchain-tx.exe xpchain-qt.exe
+          if [ -f xpchain-qt.exe ]; then
+            zip -9 "../xpchain-${TAG}-win32.zip" xpchaind.exe xpchain-cli.exe xpchain-tx.exe xpchain-qt.exe
+          else
+            zip -9 "../xpchain-${TAG}-win32.zip" xpchaind.exe xpchain-cli.exe xpchain-tx.exe
+          fi
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -142,6 +152,7 @@ jobs:
   macos:
     name: macOS arm64/x86_64 runner build
     runs-on: macos-latest
+    continue-on-error: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -157,19 +168,31 @@ jobs:
         run: |
           BREW_PREFIX="$(brew --prefix)"
           BOOST_PREFIX="$(brew --prefix boost)"
+          export BOOST_ROOT="${BOOST_PREFIX}"
+          export BOOST_INCLUDEDIR="${BOOST_PREFIX}/include"
+          export BOOST_LIBRARYDIR="${BOOST_PREFIX}/lib"
+          export BOOST_SYSTEM_LIB="-lboost_system"
+          export BOOST_FILESYSTEM_LIB="-lboost_filesystem"
+          export BOOST_THREAD_LIB="-lboost_thread"
+          export BOOST_CHRONO_LIB="-lboost_chrono"
           export LDFLAGS="-L${BREW_PREFIX}/opt/openssl@3/lib -L${BREW_PREFIX}/opt/berkeley-db@4/lib -L${BREW_PREFIX}/opt/boost/lib"
           export CPPFLAGS="-I${BREW_PREFIX}/opt/openssl@3/include -I${BREW_PREFIX}/opt/berkeley-db@4/include -I${BREW_PREFIX}/opt/boost/include"
           export PKG_CONFIG_PATH="${BREW_PREFIX}/opt/openssl@3/lib/pkgconfig:${BREW_PREFIX}/opt/qt@5/lib/pkgconfig"
           ./autogen.sh
-          ./configure --with-gui=qt5 --with-boost="${BOOST_PREFIX}" --with-boost-libdir="${BOOST_PREFIX}/lib"
+          ./configure --without-gui --with-boost="${BOOST_PREFIX}" --with-boost-libdir="${BOOST_PREFIX}/lib"
           make -j"$(sysctl -n hw.ncpu)"
 
       - name: Package
         run: |
           TAG="${RELEASE_TAG}"
           mkdir -p dist
-          cp src/xpchaind src/xpchain-cli src/xpchain-tx src/qt/xpchain-qt dist/
-          tar -C dist -czf "xpchain-${TAG}-macos.tar.gz" xpchaind xpchain-cli xpchain-tx xpchain-qt
+          cp src/xpchaind src/xpchain-cli src/xpchain-tx dist/
+          if [ -f src/qt/xpchain-qt ]; then cp src/qt/xpchain-qt dist/; fi
+          if [ -f dist/xpchain-qt ]; then
+            tar -C dist -czf "xpchain-${TAG}-macos.tar.gz" xpchaind xpchain-cli xpchain-tx xpchain-qt
+          else
+            tar -C dist -czf "xpchain-${TAG}-macos.tar.gz" xpchaind xpchain-cli xpchain-tx
+          fi
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
