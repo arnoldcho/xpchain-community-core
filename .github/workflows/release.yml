@@ -199,19 +199,30 @@ jobs:
             QT5_PREFIX="$(brew --prefix qt@5)"
             "${QT5_PREFIX}/bin/macdeployqt" XPChain-Qt.app -verbose=1
             BOOST_LIBDIR="$(brew --prefix boost)/lib"
+            APP_BIN="XPChain-Qt.app/Contents/MacOS/XPChain-Qt"
             APP_FW_DIR="XPChain-Qt.app/Contents/Frameworks"
-            # macdeployqt may miss transitive non-Qt dylibs (e.g. libboost_atomic).
-            for lib in libboost_atomic.dylib libboost_thread.dylib libboost_filesystem.dylib libboost_chrono.dylib; do
-              if [ -f "${BOOST_LIBDIR}/${lib}" ]; then
-                cp -f "${BOOST_LIBDIR}/${lib}" "${APP_FW_DIR}/${lib}"
-                install_name_tool -id "@loader_path/${lib}" "${APP_FW_DIR}/${lib}" || true
-              fi
+            # macdeployqt may miss transitive non-Qt dylibs. Bundle all Boost dylibs and rewrite install names.
+            for libpath in "${BOOST_LIBDIR}"/libboost_*.dylib; do
+              [ -f "${libpath}" ] || continue
+              cp -f "${libpath}" "${APP_FW_DIR}/"
             done
-            install_name_tool -change "$(brew --prefix boost)/lib/libboost_atomic.dylib" "@loader_path/libboost_atomic.dylib" "${APP_FW_DIR}/libboost_thread.dylib" || true
-            install_name_tool -change "$(brew --prefix boost)/lib/libboost_chrono.dylib" "@loader_path/libboost_chrono.dylib" "${APP_FW_DIR}/libboost_thread.dylib" || true
-            install_name_tool -change "$(brew --prefix boost)/lib/libboost_thread.dylib" "@executable_path/../Frameworks/libboost_thread.dylib" "XPChain-Qt.app/Contents/MacOS/XPChain-Qt" || true
-            install_name_tool -change "$(brew --prefix boost)/lib/libboost_filesystem.dylib" "@executable_path/../Frameworks/libboost_filesystem.dylib" "XPChain-Qt.app/Contents/MacOS/XPChain-Qt" || true
-            install_name_tool -change "$(brew --prefix boost)/lib/libboost_chrono.dylib" "@executable_path/../Frameworks/libboost_chrono.dylib" "XPChain-Qt.app/Contents/MacOS/XPChain-Qt" || true
+
+            for dylib in "${APP_FW_DIR}"/libboost_*.dylib; do
+              [ -f "${dylib}" ] || continue
+              base="$(basename "${dylib}")"
+              install_name_tool -id "@loader_path/${base}" "${dylib}" || true
+              otool -L "${dylib}" | awk '/libboost_.*\\.dylib/{print $1}' | while read -r dep; do
+                [ -n "${dep}" ] || continue
+                dep_base="$(basename "${dep}")"
+                install_name_tool -change "${dep}" "@loader_path/${dep_base}" "${dylib}" || true
+              done
+            done
+
+            otool -L "${APP_BIN}" | awk '/libboost_.*\\.dylib/{print $1}' | while read -r dep; do
+              [ -n "${dep}" ] || continue
+              dep_base="$(basename "${dep}")"
+              install_name_tool -change "${dep}" "@executable_path/../Frameworks/${dep_base}" "${APP_BIN}" || true
+            done
             # Re-sign after deployment to avoid broken signature state on user machines.
             codesign --force --deep --sign - --timestamp=none XPChain-Qt.app
             codesign --verify --deep --strict --verbose=2 XPChain-Qt.app
