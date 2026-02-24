@@ -183,7 +183,6 @@ jobs:
           export LDFLAGS="-L${BREW_PREFIX}/opt/openssl@3/lib -L${BREW_PREFIX}/opt/berkeley-db@4/lib -L${BREW_PREFIX}/opt/boost/lib"
           export CPPFLAGS="-I${BREW_PREFIX}/opt/openssl@3/include -I${BREW_PREFIX}/opt/berkeley-db@4/include -I${BREW_PREFIX}/opt/boost/include"
           export PKG_CONFIG_PATH="${BREW_PREFIX}/opt/openssl@3/lib/pkgconfig:${BREW_PREFIX}/opt/qt@5/lib/pkgconfig"
-          export LIBS="-lboost_system -lboost_filesystem -lboost_thread -lboost_chrono $LIBS"
           ./autogen.sh
           ./configure --without-gui \
             --with-boost="${BOOST_PREFIX}" \
