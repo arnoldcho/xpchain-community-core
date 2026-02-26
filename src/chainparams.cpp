@@ -144,6 +144,8 @@ public:
         // service bits we want, but we should get them updated to support all service bits wanted by any
         // release ASAP to avoid it where possible.
         vSeeds.emplace_back("seed1.xpchain.co.kr");
+        vSeeds.emplace_back("seed2.xpchain.co.kr");
+        vSeeds.emplace_back("seed3.xpchain.co.kr");
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,76);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,28);
@@ -248,6 +250,8 @@ public:
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
         vSeeds.emplace_back("seed1.xpchain.co.kr");
+        vSeeds.emplace_back("seed2.xpchain.co.kr");
+        vSeeds.emplace_back("seed3.xpchain.co.kr");
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,138);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,88);

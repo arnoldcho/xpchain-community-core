@@ -3839,8 +3839,8 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 mocha
         <translation>取引の金額が小さすぎて手数料を支払えません</translation>
     </message>
     <message>
-        <source>This is experimental software.</source>
-        <translation>これは実験用のソフトウェアです。</translation>
+        <source>This software is under active community maintenance and may change between releases.</source>
+        <translation>このソフトウェアはコミュニティによって継続的に保守されており、リリース間で変更される場合があります。</translation>
     </message>
     <message>
         <source>Transaction amount too small</source>

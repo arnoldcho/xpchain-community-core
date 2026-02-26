@@ -2377,7 +2377,7 @@
     </message>
     <message>
         <source>Using the fallbackfee can result in sending a transaction that will take several hours or days (or never) to confirm. Consider choosing your fee manually or wait until you have validated the complete chain.</source>
-        <translation>Fallbackfee를 사용하게 될 경우 보낸 거래가 승인이 완료 될 때까지 몇 시간 혹은 몇 일 (혹은 영원히) 이 걸릴 수 있습니다. 수동으로 수수료를 선택하거나 전체 체인의 유효성이 검증될 때까지 기다리십시오.</translation>
+        <translation>-fallbackfee 사용 시 거래 확인이 수시간~수일 지연되거나 확인되지 않을 수 있습니다. 수수료를 수동으로 지정하거나 체인 검증이 완료될 때까지 기다리십시오.</translation>
     </message>
     <message>
         <source>Warning: Fee estimation is currently not possible.</source>
@@ -2421,7 +2421,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 mocha
     </message>
     <message>
         <source>(Smart fee not initialized yet. This usually takes a few blocks...)</source>
-        <translation>(Smart fee가 아직 초기화 되지 않았습니다. 블록 분석이 완전하게 끝날 때 까지 기다려주십시오...)</translation>
+        <translation>(스마트 수수료가 아직 초기화되지 않았습니다. 보통 몇 개 블록이 더 필요합니다...)</translation>
     </message>
     <message>
         <source>Send to multiple recipients at once</source>
@@ -3508,11 +3508,11 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 mocha
     </message>
     <message>
         <source>Prune: last wallet synchronisation goes beyond pruned data. You need to -reindex (download the whole blockchain again in case of pruned node)</source>
-        <translation>블록 축소: 마지막 지갑 동기화 지점이 축소된 데이터보다 과거의 것 입니다. -reindex가 필요합니다 (정지된 노드의 경우 모든 블록체인을 재다운로드합니다)</translation>
+        <translation>프루닝: 마지막 지갑 동기화 지점이 프루닝된 데이터 범위를 벗어났습니다. -reindex가 필요합니다 (프루닝 노드에서는 전체 블록체인을 다시 다운로드합니다)</translation>
     </message>
     <message>
         <source>Rescans are not possible in pruned mode. You will need to use -reindex which will download the whole blockchain again.</source>
-        <translation>블록 축소 모드에서는 재검색이 불가능 합니다. -reindex 명령을 사용해서 모든 블록체인을 다시 다운로드 해야 합니다.</translation>
+        <translation>프루닝 모드에서는 재검색이 지원되지 않습니다. -reindex를 사용해 전체 블록체인을 다시 다운로드해야 합니다.</translation>
     </message>
     <message>
         <source>Error: A fatal internal error occurred, see debug.log for details</source>
@@ -3551,8 +3551,8 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 mocha
         <translation>컴퓨터의 날짜와 시간이 올바른지 확인하십시오! 시간이 잘못되면 %s은 제대로 동작하지 않습니다.</translation>
     </message>
     <message>
-        <source>Please contribute if you find %s useful. Visit %s for further information about the software.</source>
-        <translation>%s가 유용하다고 생각한다면 프로젝트에 공헌해주세요. 이 소프트웨어에 대한 보다 자세한 정보는 %s를 방문해주십시오.</translation>
+        <source>For the latest information about %s, visit %s.</source>
+        <translation>%s의 최신 정보는 %s에서 확인하십시오.</translation>
     </message>
     <message>
         <source>The block database contains a block which appears to be from the future. This may be due to your computer's date and time being set incorrectly. Only rebuild the block database if you are sure that your computer's date and time are correct</source>
@@ -3680,7 +3680,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 mocha
     </message>
     <message>
         <source>Invalid amount for -discardfee=&lt;amount&gt;: '%s'</source>
-        <translation>-discardfee=&lt;amount&gt;에 대한 양이 잘못되었습니다: '%s'</translation>
+        <translation>-discardfee=&lt;amount&gt; 값이 올바르지 않습니다: '%s'</translation>
     </message>
     <message>
         <source>Invalid amount for -fallbackfee=&lt;amount&gt;: '%s'</source>
@@ -3776,7 +3776,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 mocha
     </message>
     <message>
         <source>Invalid amount for -maxtxfee=&lt;amount&gt;: '%s' (must be at least the minrelay fee of %s to prevent stuck transactions)</source>
-        <translation>유효하지 않은 금액 -maxtxfee=&lt;amount&gt;: '%s' (거래가 막히는 상황을 방지하게 위해 적어도 %s 의 중계 수수료를 지정해야 합니다)</translation>
+        <translation>유효하지 않은 금액 -maxtxfee=&lt;amount&gt;: '%s' (거래가 멈추는 상황을 방지하기 위해 최소 %s의 중계 수수료를 지정해야 합니다)</translation>
     </message>
     <message>
         <source>The transaction amount is too small to send after the fee has been deducted</source>
@@ -3784,7 +3784,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 mocha
     </message>
     <message>
         <source>You need to rebuild the database using -reindex to go back to unpruned mode.  This will redownload the entire blockchain</source>
-        <translation>축소 모드를 해제하고 데이터베이스를 재구성 하기 위해 -reindex를 사용해야 합니다. 이 명령은 모든 블록체인을 다시 다운로드 할 것 입니다.</translation>
+        <translation>프루닝 해제 모드로 되돌리려면 -reindex로 데이터베이스를 재구성해야 합니다. 이 과정에서 전체 블록체인을 다시 다운로드합니다.</translation>
     </message>
     <message>
         <source>Error loading %s: You can't disable HD on an already existing HD wallet</source>
@@ -3812,7 +3812,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 mocha
     </message>
     <message>
         <source>Invalid amount for -paytxfee=&lt;amount&gt;: '%s' (must be at least %s)</source>
-        <translation>유효하지 않은 금액 -paytxfee=&lt;amount&gt;: "%s" (최소 %s 이상이어야 됨)</translation>
+        <translation>유효하지 않은 금액 -paytxfee=&lt;amount&gt;: "%s" (최소 %s 이상이어야 합니다)</translation>
     </message>
     <message>
         <source>Invalid netmask specified in -whitelist: '%s'</source>
@@ -3835,8 +3835,8 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 mocha
         <translation>거래액이 수수료를 지불하기엔 너무 작습니다</translation>
     </message>
     <message>
-        <source>This is experimental software.</source>
-        <translation>이 소프트웨어는 시험적입니다.</translation>
+        <source>This software is under active community maintenance and may change between releases.</source>
+        <translation>이 소프트웨어는 커뮤니티가 활발히 유지보수 중이며 릴리즈 간 변경될 수 있습니다.</translation>
     </message>
     <message>
         <source>Transaction amount too small</source>
@@ -3880,7 +3880,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 mocha
     </message>
     <message>
         <source>-maxtxfee is set very high! Fees this large could be paid on a single transaction.</source>
-        <translation>-maxtxfee값이 너무 큽니다!  하나의 거래에 너무 큰 수수료가 지불 됩니다.</translation>
+        <translation>-maxtxfee 값이 너무 큽니다. 단일 거래에 과도한 수수료가 지불될 수 있습니다.</translation>
     </message>
     <message>
         <source>Error loading %s: You can't enable HD on an already existing non-HD wallet</source>
@@ -3920,7 +3920,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 mocha
     </message>
     <message>
         <source>Error loading wallet %s. Duplicate -wallet filename specified.</source>
-        <translation>지갑 %s 로딩 에러,  중복된 -wallet 파일이름을 입력했습니다.</translation>
+        <translation>지갑 %s 로드 오류: 중복된 -wallet 파일 이름이 지정되었습니다.</translation>
     </message>
     <message>
         <source>Keypool ran out, please call keypoolrefill first</source>
@@ -3972,7 +3972,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 mocha
     </message>
     <message>
         <source>Fee estimation failed. Fallbackfee is disabled. Wait a few blocks or enable -fallbackfee.</source>
-        <translation>수수료 견적 실패. Fallbackfee 비활성화 상태. 몇 블록을 기다리거나 -fallbackfee를 활성화 시키십시오.</translation>
+        <translation>수수료 추정에 실패했습니다. -fallbackfee가 비활성화되어 있습니다. 몇 개 블록을 더 기다리거나 -fallbackfee를 활성화하십시오.</translation>
     </message>
     <message>
         <source>Warning: Private keys detected in wallet {%s} with disabled private keys</source>
