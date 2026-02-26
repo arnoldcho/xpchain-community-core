@@ -56,6 +56,15 @@ Project metadata updates
 - Updated project links and metadata.
 - Refreshed About/Splash text to reflect current community maintenance context.
 
+UI text and localization updates
+--------------------------------
+
+- Updated About dialog wording to: "This software is under active community
+  maintenance and may change between releases."
+- Aligned Korean/Japanese translation keys with updated About text.
+- Improved Korean wording quality for fee, pruning/reindex, and wallet error
+  messages to reduce ambiguity in user-facing dialogs.
+
 Operational documentation
 -------------------------
 
@@ -70,6 +79,7 @@ XPChain 0.17.0-4 change log
 - macOS DMG/app bundle generation improvements
 - Windows/Linux compatibility fixes
 - About/Splash metadata update
+- About wording and localization update (ko/ja)
 - Linux node setup documentation
 
 Credits

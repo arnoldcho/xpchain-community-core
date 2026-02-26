@@ -84,3 +84,95 @@
 ### Conclusion
 - Linux runtime and wallet receive/send/restart behavior validated for `v0.17.0-4`.
 - Current status: **usable for practical wallet operation** under tested Ubuntu 24.04 environment.
+
+## Windows Validation (PASS)
+
+### Environment
+- Platform: Windows 64-bit
+- Runtime binary: `xpchain-qt.exe`
+- Build: `0.17.0`
+
+### Checks
+1. App launch
+- Result: `PASS`
+- Notes: `xpchain-qt.exe` launched normally on Windows 64-bit environment.
+
+2. Node start and chain progress
+- Command: `./xpchain-cli getblockchaininfo`
+- Result: `PASS`
+- Notes: node started normally, chain sync progressed from low height and continued.
+
+3. P2P connectivity
+- Command: `./xpchain-cli getnetworkinfo`, `./xpchain-cli getconnectioncount`
+- Result: `PASS`
+- Notes: active peers observed (`connections` in normal range, e.g. 7~9).
+
+4. Wallet status RPC
+- Command: `./xpchain-cli getwalletinfo`
+- Result: `PASS`
+- Notes: wallet metadata and keypool fields returned normally.
+
+5. Receive transaction flow
+- Command: `listtransactions` (Qt debug console)
+- Result: `PASS`
+- Notes: `category: "receive"` transaction confirmed, confirmations increased over time.
+
+6. Send transaction flow
+- Command: `listtransactions` (Qt debug console)
+- Result: `PASS`
+- Notes: `category: "send"` transaction confirmed with fee and block inclusion.
+
+7. Restart resilience
+- Action: close and relaunch wallet (`xpchain-qt.exe`)
+- Result: `PASS`
+- Notes: wallet restarted cleanly and returned to normal state after relaunch.
+
+### Conclusion
+- Windows 64-bit runtime and wallet receive/send/restart behavior validated for `v0.17.0-4`.
+- Current status: **usable for practical wallet operation** under tested Windows 64-bit environment.
+
+## Windows 32-bit Validation (PASS)
+
+### Environment
+- Platform: Windows 32-bit
+- Runtime binary: `xpchain-qt.exe`
+- Build: `0.17.0`
+
+### Checks
+1. App launch
+- Result: `PASS`
+- Notes: `xpchain-qt.exe` launched normally on Windows 32-bit environment.
+
+2. Node start and chain progress
+- Command: `./xpchain-cli getblockchaininfo`
+- Result: `PASS`
+- Notes: node started normally, chain sync progressed from low height and continued.
+
+3. P2P connectivity
+- Command: `./xpchain-cli getnetworkinfo`, `./xpchain-cli getconnectioncount`
+- Result: `PASS`
+- Notes: active peers observed (`connections` in normal range, e.g. 7~9).
+
+4. Wallet status RPC
+- Command: `./xpchain-cli getwalletinfo`
+- Result: `PASS`
+- Notes: wallet metadata and keypool fields returned normally.
+
+5. Receive transaction flow
+- Command: `listtransactions` (Qt debug console)
+- Result: `PASS`
+- Notes: `category: "receive"` transaction confirmed, confirmations increased over time.
+
+6. Send transaction flow
+- Command: `listtransactions` (Qt debug console)
+- Result: `PASS`
+- Notes: `category: "send"` transaction confirmed with fee and block inclusion.
+
+7. Restart resilience
+- Action: close and relaunch wallet (`xpchain-qt.exe`)
+- Result: `PASS`
+- Notes: wallet restarted cleanly and returned to normal state after relaunch.
+
+### Conclusion
+- Windows 32-bit runtime and wallet receive/send/restart behavior validated for `v0.17.0-4`.
+- Current status: **usable for practical wallet operation** under tested Windows 32-bit environment.
